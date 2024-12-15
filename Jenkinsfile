@@ -1,5 +1,10 @@
 pipeline {
     agent any
+
+    tools {
+       terraform 'terraform'
+    }
+    
     parameters {
         choice(name: 'ENVIRONMENT', choices: ['dev', 'staging', 'prod'], description: 'Select the environment')
         choice(name: 'OPERATION', choices: ['init', 'plan', 'apply', 'destroy'], description: 'Select the Terraform operation')

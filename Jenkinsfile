@@ -30,7 +30,7 @@ pipeline {
                     dir(env.TERRAFORM_DIR) {
                         switch (params.OPERATION) {
                             case 'init':
-                                sh 'terraform init -reconfigure'
+                                sh 'terraform init'
                                 break
                             case 'plan':
                                 sh 'terraform plan -out=tfplan'

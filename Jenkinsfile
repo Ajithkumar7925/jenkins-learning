@@ -33,6 +33,7 @@ pipeline {
                                 sh 'terraform init'
                                 break
                             case 'plan':
+                                sh 'terraform init'
                                 sh 'terraform plan -out=tfplan'
                                 break
                             case 'apply':

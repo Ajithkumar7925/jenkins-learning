@@ -27,7 +27,7 @@ pipeline {
         stage('Terraform Init') {
             steps {
                 script {
-                    dir(env.TERRAFORM_DIR){
+                    dir(params.Environment){
                         sh 'terraform init'
                 }
             }
@@ -38,7 +38,7 @@ pipeline {
             steps {
                 script {
                     // Run Terraform based on the selected operation
-                    dir(env.TERRAFORM_DIR){
+                    dir(params.Environment){
                         switch(params.TERRAFORM_OPERATION) {
                             case 'plan':
                                 sh "terraform plan -out=tfplan"

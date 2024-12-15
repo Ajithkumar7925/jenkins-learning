@@ -15,6 +15,12 @@ pipeline {
         TERRAFORM_DIR = "${params.ENVIRONMENT}"
     }
     stages {
+         stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+        
         stage('Initialize') {
             steps {
                 script {

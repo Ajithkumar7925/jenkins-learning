@@ -5,7 +5,7 @@ pipeline {
         choice(name: 'OPERATION', choices: ['init', 'plan', 'apply', 'destroy'], description: 'Select the Terraform operation')
     }
     environment {
-        TERRAFORM_DIR = "${params.ENVIRONMENT}/terraform"
+        TERRAFORM_DIR = "${params.ENVIRONMENT}"
     }
     stages {
         stage('Initialize') {

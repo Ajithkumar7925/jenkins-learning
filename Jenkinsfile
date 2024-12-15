@@ -1,68 +1,48 @@
 pipeline {
     agent any
-
-    tools {
-       terraform 'terraform'
-    }
-
     parameters {
-        choice(name: 'Environment', choices: ['dev', 'test', 'uat', 'prod'], description: 'Select Environment')
-        choice(name: 'TERRAFORM_OPERATION', choices: ['plan', 'apply', 'destroy'], description: 'Select Terraform Operation')
+        choice(name: 'ENVIRONMENT', choices: ['dev', 'staging', 'prod'], description: 'Select the environment')
     }
-
     environment {
-        // TF_VAR_environment = params.TF_VAR_environment
         AWS_ACCESS_KEY_ID = credentials('AWS_ACCESS_KEY_ID')
         AWS_SECRET_ACCESS_KEY = credentials('AWS_SECRET_ACCESS_KEY')
         TERRAFORM_DIR = "${params.Environment}"
     }
-
     stages {
-        stage('Checkout') {
-            steps {
-                checkout scm
-            }
-        }
-
-        stage('Terraform Init') {
+        stage('Initialize') {
             steps {
                 script {
-                    dir(params.Environment){
-                        sh 'terraform init'
+                    echo "Selected environment: ${params.ENVIRONMENT}"
+                    echo "Using Terraform directory: ${env.TERRAFORM_DIR}"
                 }
             }
         }
-        }
-
-        stage('Terraform Operation') {
+        stage('Terraform Init') {
             steps {
-                script {
-                    // Run Terraform based on the selected operation
-                    dir(params.Environment){
-                        switch(params.TERRAFORM_OPERATION) {
-                            case 'plan':
-                                sh "terraform plan -out=tfplan"
-                                break
-                            case 'apply':
-                                sh "terraform plan -out=tfplan"
-                                sh 'terraform apply -auto-approve tfplan'
-                                break
-                            case 'destroy':
-                                sh "terraform destroy -auto-approve"
-                                break
-                            default:
-                                error "Invalid Terraform operation selected"
-                        }
-                    }
+                dir(env.TERRAFORM_DIR) {
+                    sh 'terraform init'
+                }
+            }
+        }
+        stage('Terraform Plan') {
+            steps {
+                dir(env.TERRAFORM_DIR) {
+                    sh 'terraform plan -out=tfplan'
+                }
+            }
+        }
+        stage('Terraform Apply') {
+            steps {
+                dir(env.TERRAFORM_DIR) {
+                    sh 'terraform apply -auto-approve tfplan'
                 }
             }
         }
     }
-
     post {
         always {
-            // Clean up artifacts, e.g., the Terraform plan file
-            deleteDir()
+            echo 'Cleaning up workspace...'
+            cleanWs()
         }
     }
 }

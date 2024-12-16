@@ -43,6 +43,8 @@ pipeline {
                                 sh 'terraform plan'
                                 break
                             case 'apply':
+                                sh 'terraform init'
+                                sh 'terraform plan'
                                 sh '''
                                 terraform apply -auto-approve || echo "Plan file not found, ensure 'plan' is executed before 'apply'."
                                 '''

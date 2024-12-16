@@ -50,6 +50,7 @@ pipeline {
                                 '''
                                 break
                             case 'destroy':
+                                sh 'terraform init'
                                 sh 'terraform destroy -auto-approve'
                                 break
                             default:

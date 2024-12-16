@@ -20,7 +20,7 @@ pipeline {
                 checkout scm
             }
         }
-        
+
         stage('Initialize') {
             steps {
                 script {
@@ -40,11 +40,11 @@ pipeline {
                                 break
                             case 'plan':
                                 sh 'terraform init'
-                                sh 'terraform plan -out=tfplan'
+                                sh 'terraform plan'
                                 break
                             case 'apply':
                                 sh '''
-                                terraform apply -auto-approve tfplan || echo "Plan file not found, ensure 'plan' is executed before 'apply'."
+                                terraform apply -auto-approve || echo "Plan file not found, ensure 'plan' is executed before 'apply'."
                                 '''
                                 break
                             case 'destroy':

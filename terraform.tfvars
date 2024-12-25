@@ -1,1 +1,1 @@
-inst_type = "t2.2xlarge"
+inst_type = "t2.micro"

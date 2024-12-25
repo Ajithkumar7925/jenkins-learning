@@ -1,1 +1,1 @@
-inst_type = "t2.micro"
+inst_type = "t3.micro"

@@ -27,7 +27,7 @@ provider "aws" {
 #   owners = ["099720109477"] # Canonical
 # }
 
-resource "aws_instance" "web" {
+resource "aws_instance" "codepipeline_learn" {
   ami           = "ami-0e2c8caa4b6378d8c"
   instance_type = var.inst_type
 
